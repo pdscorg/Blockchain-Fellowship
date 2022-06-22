@@ -7,5 +7,5 @@
 
 
 ### Contributor
-[Pranjal Pokharel](https://youtu.be/S9JGmA5_unY)  
-[Sanskar Amgain](https://youtu.be/S9JGmA5_unY)
+[Pranjal Pokharel](https://github.com/pranjalpokharel7/)  
+[Sanskar Amgain](https://github.com/Imsanskar/)
