@@ -44,6 +44,7 @@ contract Election {
 	mapping (address => Voter) voters;
 
 
+//events
 	event NewCandidateAdded (
 		uint candidateId,
 		string candidateName,
@@ -52,6 +53,7 @@ contract Election {
 		string uri
 	);
 
+//modifiers to check the conditions before calling function
 	modifier onlyOwner () {
 		require(msg.sender == owner, "Only owner can access this");
 		_;
@@ -107,8 +109,7 @@ contract Election {
 		onlyBefore(startTime) 
 		onlyOwner  {
 
-		require(bytes(_candidateName).length > 5);
-		require(_partyId > 0);
+		require(_partyId > 0, "The partyId shouldn't be zero");
 		candidateCount++;
 		candidates[candidateCount] = Candidate(candidateCount, _candidateName, _partyId, 0, _uri);
 		emit NewCandidateAdded(candidateCount, _candidateName, _partyId, 0, _uri);
@@ -140,8 +141,8 @@ contract Election {
 
 		Voter storage _voter = voters[msg.sender];
 
-		require(!_voter.voted);
-		require(_voter.registered);
+		require(!_voter.voted, "You have already voted");
+		require(_voter.registered, "You are not registered/approved as a voter");
 
 		_voter.vote = _candidateId;
 		candidates[_candidateId].candidateVoteCount++;
