@@ -57,7 +57,7 @@ div {
     margin-right: 5%;
     border: 2px solid black;
     padding: 10px 20px;
-    float: inline-end;
+    float: right;
     cursor: pointer;
 }
 
