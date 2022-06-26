@@ -12,7 +12,7 @@ async function main() {
     console.log("Account balance:", (await deployer.getBalance()).toString());
   
     const Election = await ethers.getContractFactory("Election");
-    const election = await Election.deploy("Election for Mayor of Kathmandu");
+    const election = await Election.deploy("Nepal Votes");
     await election.deployed();
   
     console.log("Election Contract address:", election.address);
