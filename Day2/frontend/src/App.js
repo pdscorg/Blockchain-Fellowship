@@ -24,6 +24,9 @@ const App = () => {
             if (window.ethereum === undefined) {
                 console.log("no wallet detected")
             }
+            window.ethereum.on("accountsChanged", function account() {
+                setAccount(window.ethereum.selectedAddress)
+            })
         }
         fetchData();
     }, [])
