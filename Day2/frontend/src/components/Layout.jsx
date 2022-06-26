@@ -34,7 +34,6 @@ const Layout = ({ addr, owner }) => {
                     "regStartTs": parseInt(_registrationStart._hex),
                     "regEndTs": parseInt(_registrationEnd._hex)
                 }
-                console.log(jsonData)
                 setVoteTimeDetails(jsonData)
             } catch (error) {
                 setVoteTimeDetails({
