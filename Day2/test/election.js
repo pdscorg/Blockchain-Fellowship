@@ -5,7 +5,7 @@
 
 // We import Chai to use its asserting functions here.
 const { expect } = require("chai");
-const { upgrades,ethers, run } = require("hardhat");
+const { upgrades, ethers, run } = require("hardhat");
 
 
 // `describe` is a Mocha function that allows you to organize your tests. It's
@@ -73,6 +73,36 @@ describe("Election contract", function () {
         await hardhatElection.connect(owner).approveVoters(addr1.address);
        
       });
+
+    it("should be able to set timestamps", async function() {
+      // general users should not be able to start
+      await expect(hardhatElection.connect(addr1).startRegistration()).to.be.revertedWith("Only owner can access this");
+      await expect(hardhatElection.connect(addr1).startRegistration()).to.be.revertedWith("");
+
+      // owner should be able to start registration
+      await hardhatElection.connect(owner).startRegistration();
+    })
+
+    it("should be able to accept and withdraw deposits", async function() {
+      // check previous balance of contract
+      const prevBalance = await hardhatElection.getBalance()
+      expect(prevBalance).to.equal(ethers.utils.parseUnits("0"))
+      // any user should be able to deposit
+      await hardhatElection.donate({value: ethers.utils.parseUnits("0.1")})
+      // check new balance of contract
+      let newBalance = await hardhatElection.getBalance()
+      expect(newBalance).to.equal(ethers.utils.parseUnits("0.1"))
+
+      // withdraw balance
+      await hardhatElection.withdraw(addr1.getAddress(), ethers.utils.parseUnits("0.01"))
+      newBalance = await hardhatElection.getBalance()
+      expect(newBalance).to.equal(ethers.utils.parseUnits("0.09"))
+    })
+
+
+//    const options = {value: ethers.utils.parseUnits("0.01")}
+//    await contract.functioname( <args if it take arguments> , options)
+
 
 
   });

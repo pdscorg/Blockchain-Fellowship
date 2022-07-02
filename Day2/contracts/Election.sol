@@ -258,6 +258,35 @@ contract Election {
 		return list;
 	}
 
+	// Donation
+	// To implement payable methods
+
+	event AcceptDonation(address donor);
+
+	/**
+	  *	@dev Can donate ether to this contract
+	 */
+	function donate() payable external {
+		emit AcceptDonation(msg.sender);		
+	}
+
+	/**
+	  * @dev Can get how ether balance of contract
+	*/
+	function getBalance() public view returns(uint) {
+		return address(this).balance;
+	}
+
+	/**
+	  * @dev Withdraw to a wallet
+	  * @param _to Address to transfer amount to 
+	  * @param _amount Amount of ETH in wei
+	*/
+	function withdraw(address payable _to, uint _amount) external payable onlyOwner {
+		require(address(this).balance >= _amount, "Contract does not have enough fund");
+		payable(_to).transfer(_amount);
+	}
+
 }
 
 
