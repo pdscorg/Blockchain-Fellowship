@@ -5,8 +5,7 @@
 
 // We import Chai to use its asserting functions here.
 const { expect } = require("chai");
-const { upgrades,ethers, run } = require("hardhat");
-
+const { upgrades, ethers, run } = require("hardhat");
 
 // `describe` is a Mocha function that allows you to organize your tests. It's
 // not actually needed, but having your tests organized makes debugging them
@@ -62,20 +61,94 @@ describe("Election contract", function () {
       // to our Signer's owner.
       expect(await hardhatElection.owner()).to.equal(owner.address);
     });
-    it("Register as Voter and Approve voter", async function () {
-        //If it can be registered before registration time
-        await expect (hardhatElection.connect(addr1).registerAsVoter(13445662)).to.be.revertedWith("");
-
-        await hardhatElection.startRegistration();
-
-        await hardhatElection.connect(addr1).registerAsVoter(13445662);
-
-        await hardhatElection.connect(owner).approveVoters(addr1.address);
-       
-      });
-
-
   });
 
-});
+  describe("Election", async function () {
+    // Start Registration
 
+    it("Election Process", async function () {
+      await hardhatElection.startRegistration();
+
+      /*Register as a voter*/
+      await hardhatElection.connect(addr1).registerAsVoter(123456789);
+      await hardhatElection.connect(addr2).registerAsVoter(987654321);
+
+      /*Approve voter*/
+      await hardhatElection.approveVoters(addr1.address);
+      await hardhatElection.approveVoters(addr2.address);
+
+      // End Registration
+      await hardhatElection.connect(owner).endRegistration();
+
+      it("Add Candidate", async function () {
+        // Adding the condidate for the election
+        await hardhatElection.addCandidates(
+          "Something Nothing",
+          "123",
+          "something@nothing.com"
+        );
+        await hardhatElection.addCandidates(
+          "Someone Noone",
+          "456",
+          "someone@noone.com"
+        );
+
+        expect(await hardhatElection.getCandidates()[0].candidateName).to.equal(
+          "Something Nothing"
+        );
+        expect(await hardhatElection.getCandidates()[1].candidateName).to.equal(
+          "Someone Noone"
+        );
+
+        /*Checking total number of candidatec count*/
+        expect(await hardhatElection.candidateCount()).to.equal(2);
+        it("Start Election", async function () {
+          // Start Election
+          await hardhatElection.connect(owner).startElection();
+
+          it("Voting Process", async function () {
+            // Voting process
+            await hardhatElection.connect(addr1).vote(0);
+            await hardhatElection.connect(addr2).vote(0);
+
+            it("End Election", async function () {
+              // End Election
+              await hardhatElection.connect(owner).endElection();
+              expect(
+                await hardhatElection.connect(addr1).endElection()
+              ).to.be.revertedWith("");
+            });
+
+            /*Checking results*/
+            expect(
+              await hardhatElection.checkResults()[0].candidateName
+            ).to.equal("Something Nothing");
+
+            /*Checking final stats*/
+            expect(
+              await hardhatElection.getFinalStats()[0].candidateVoteCount
+            ).to.equal(2);
+            expect(
+              await hardhatElection.getFinalStats()[1].candidateVoteCount
+            ).to.equal(0);
+          });
+        });
+      });
+    });
+  });
+
+  describe("Extras", async function () {
+    it("Changing Owner", async function () {
+      /*Changing the owner*/
+      await hardhatElection.changeOwner(addr1.address);
+
+      expect(await hardhatElection.owner()).to.equal(addr1.address);
+    });
+
+    it("Election Name", async function () {
+      expect(await hardhatElection.electionName()).to.equal(
+        "Mayor of Kathmandu"
+      );
+    });
+  });
+});
