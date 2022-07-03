@@ -9,7 +9,7 @@ This project is intended to be used with the
 able to follow it by yourself by reading the README and exploring its
 `contracts`, `tests`, `scripts` and `frontend` directories.
 
-## Quick start
+## Quick start of Hardhat
 
 The first things you need to do are cloning this repository and installing its
 dependencies:
@@ -30,7 +30,7 @@ Then, on a new terminal, go to the repository's root folder and run this to
 deploy your contract:
 
 ```sh
-npx hardhat run scripts/deploy_election.js --network localhost
+npx hardhat run scripts/deploy.js --network localhost
 ```
 
 Finally, we can run the frontend with:
@@ -41,13 +41,81 @@ npm install
 npm start
 ```
 
-> Note: There's [an issue in `ganache-core`](https://github.com/trufflesuite/ganache-core/issues/650) that can make the `npm install` step fail. 
+> Note: There's [an issue in `ganache-core`](https://github.com/trufflesuite/ganache-core/issues/650) that can make the `npm install` step fail.
 >
 > If you see `npm ERR! code ENOLOCAL`, try running `npm ci` instead of `npm install`.
 
 Open [http://localhost:3000/](http://localhost:3000/) to see your Dapp. You will
 need to have [Metamask](https://metamask.io) installed and listening to
 `localhost 8545`.
+
+## Setup of Day 2
+
+1. Clone the repository:
+
+   ```sh
+   git clone https://github.com/pdscorg/Blockchain-Fellowship.git
+   cd Blockchain-Fellowship
+   ```
+
+1. After you have clone the repository change your directory to Day2
+
+   ```sh
+   cd Day2
+   ```
+
+1. Then after you need to install all the dependencies of node package for that run the command inside `Day2`
+
+   ```sh
+   npm install
+   ```
+
+1. Change your directory to `frontend` folder where you have to install node package dependencies by running the command
+
+   ```sh
+   cd frontend
+   npm install
+   ```
+
+1. Change you directory to the `Day2` again and run
+
+   ```sh
+   cd ../
+   ```
+
+   **In one terminal:**
+
+   It will create you some free account to work with
+
+   ```sh
+   npx hardhat node
+   ```
+
+   _Note:
+   Add few of those account in you metamask
+   Account 0 is admin account and other are the account to make transactions_
+
+   **In another terminal:**
+
+   It will deploy your `Election` contract locally
+
+   ```sh
+   npx hardhat run scripts/deploy_election.js --network localhost
+   ```
+
+   _In another terminal:_
+
+   ```sh
+   npm start
+   ```
+
+   **Then you can play with Election contract you have made.**
+
+1. To test the contract run the command we have written some test case inside `test/election.js`
+
+   ```sh
+   npx hardhat test
+   ```
 
 ## User Guide
 
